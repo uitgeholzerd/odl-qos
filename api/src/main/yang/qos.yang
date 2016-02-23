@@ -3,7 +3,59 @@ module qos {
     namespace "urn:opendaylight:params:xml:ns:yang:qos";
     prefix "qos";
 
-    revision "2015-01-05" {
-        description "Initial revision of qos model";
+    revision "2016-02-22" {
+            description "Initial revision of qodl model";
+        }
+        import "ietf-inet-types" {
+    	prefix inet;
+    	}
+
+        import "ietf-yang-types" {
+    	prefix yang;
+    	}
+
+    	grouping socket {
+                leaf address {
+                    type inet:ip-prefix;
+                }
+                leaf port {
+                    type inet:port-number;
+                }
+            }
+
+        rpc add-qos-flow {
+            input {
+                container src {
+    		uses socket;
     }
+    		container dst {
+    		uses socket;
+    }
+
+    	    leaf qos {
+                    type uint8;
+                }
+    	}
+
+            output {
+                leaf success {
+                    type boolean;
+                }
+
+                leaf id {
+                    type yang:object-identifier;
+                }
+            }
+        }
+        container qos-registry {
+            list qos-registry-entry {
+                key "id";
+                leaf id {
+                    type yang:object-identifier;
+                }
+    	    leaf qos {
+                    type uint8;
+                }
+            }
+        }
 }
